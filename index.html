@@ -837,26 +837,14 @@ function renderDetail(c) {
   if(!c['Business Prospect']) mf.push('Business Prospect');
   if(!(c.Heritage||[]).length) mf.push('Heritage');
 
-  const sel = (opts, val, fld) => {
-  const options = opts.map(o => `<option${val === o ? ' selected' : ''}>${o}</option>`).join('');
-  return `<select onchange="uf('${fld}', this.value)"><option value="">— Select —</option>${options}</select>`;
-};
-
-const inp = (fld, val, tp, ph) => {
-  const type = tp || 'text';
-  const value = esc(val || '');
-  const placeholder = ph || fld;
-  return `<input type="${type}" value="${value}" placeholder="${placeholder}" onchange="uf('${fld}', this.value)">`;
-};
-
   const heritage=c.Heritage||[];
   const autoU=c.Heritage_auto&&!c._heritageEdited;
   const hTags = HO.map(h => {
-  const classes = ['htag'];
-  if (heritage.includes(h)) classes.push('on');
-  if (heritage.includes(h) && autoU) classes.push('auto');
-  return `<span class="${classes.join(' ')}" data-heritage="${h}" onclick="toggleH(this.dataset.heritage)">${h}</span>`;
-}).join('');
+    const classes = ['htag'];
+    if (heritage.includes(h)) classes.push('on');
+    if (heritage.includes(h) && autoU) classes.push('auto');
+    return '<span class="' + classes.join(' ') + '" data-heritage="' + h + '" onclick="toggleH(this.dataset.heritage)">' + h + '</span>';
+  }).join('');
 
   const fuCls={none:'',overdue:'overdue',soon:'soon',ok:'ok'}[fu];
   const fuLbl={none:'NO FOLLOW-UP SET',overdue:'OVERDUE',soon:'DUE SOON',ok:'SCHEDULED'}[fu];
@@ -875,8 +863,6 @@ const inp = (fld, val, tp, ph) => {
     +'<div class="tab on" onclick="swTab(this,\'tp\')">Profile</div>'
     +'<div class="tab" onclick="swTab(this,\'ta\')">Activity '+cb+fb+'</div>'
     +'</div>'
-
-    // PROFILE TAB
     +'<div class="tc on" id="tp">'
     +'<div class="stitle">Core</div>'
     +'<div class="fg">'
@@ -904,14 +890,12 @@ const inp = (fld, val, tp, ph) => {
     +'<div class="trow"><span>Seasonal greetings</span><label class="tog"><input type="checkbox" '+(c['Thanks giving message']||c['Write to for Holidays']?'checked':'')+' onchange="uf2(this.checked)"><span class="tog-sl"></span></label></div>'
     +'<div class="trow"><span>Mark for deletion</span><label class="tog"><input type="checkbox" '+(c.Delete?'checked':'')+' onchange="uf(\'Delete\',this.checked)"><span class="tog-sl"></span></label></div>'
     +'</div></div>'
-
-    // ACTIVITY TAB
     +'<div class="tc" id="ta">'
     +'<div class="fu-card '+fuCls+'"><div class="fu-st '+fuCls+'">'+fuLbl+'</div>'
     +(c['Next Follow-up']?'<div class="fu-dt">'+fmtD(c['Next Follow-up'])+'</div>':'')
     +(c['Notes for next follow-up']?'<div class="fu-note">'+esc(c['Notes for next follow-up'])+'</div>':'')
     +'<div class="fu-acts"><span style="font-size:11px;color:var(--text3)">Quick:</span>'
-    +[['1w',7],['2w',14],['1m',30],['3m',90],['6m',180]].map(([l,d])=>'<button class="qbtn" onclick="setFU('+d+')">'+l+'</button>').join('')
+    +[['1w',7],['2w',14],['1m',30],['3m',90],['6m',180]].map(function(arr){return '<button class="qbtn" onclick="setFU('+arr[1]+')">'+arr[0]+'</button>';}).join('')
     +'</div></div>'
     +'<div class="fuform"><div class="fur">'
     +'<div class="fgrp"><label>Follow-up Date</label>'+inp('Next Follow-up',c['Next Follow-up'],'date')+'</div>'
@@ -921,12 +905,13 @@ const inp = (fld, val, tp, ph) => {
     +'<div class="divr"><span>Log Communication</span></div>'
     +'<div class="logform"><div class="logr">'
     +'<div class="fgrp"><label>Date</label><input type="date" id="lcd" value="'+new Date().toISOString().slice(0,10)+'"></div>'
-    +'<div class="fgrp"><label>Channel</label><select id="lcc">'+CHO.map(o=>'<option>'+o+'</option>').join('')+'</select></div>'
+    +'<div class="fgrp"><label>Channel</label><select id="lcc">'+CHO.map(function(o){return '<option>'+o+'</option>';}).join('')+'</select></div>'
     +'</div><div class="fgrp" style="margin-bottom:10px"><label>Note</label><textarea id="lcn" placeholder="What did you discuss?" rows="2"></textarea></div>'
     +'<button class="log-sub" onclick="addC()">+ Log Communication</button></div>'
     +'<div class="divr"><span>History'+(comms.length?' ('+comms.length+')':'')+'</span></div>'
     +'<div class="tl">'+tl+'</div>'
     +'<div style="height:20px"></div></div>';
+}
 
     // ACTIVITY TAB
     +'<div class="tc" id="ta">'

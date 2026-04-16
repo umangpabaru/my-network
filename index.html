@@ -1112,7 +1112,7 @@ function showFmap() {
   con.innerHTML=APP_FIELDS.map(af=>{
     const am=csvHdrs.find(h=>h.toLowerCase().replace(/[^a-z]/g,'')==af.toLowerCase().replace(/[^a-z]/g,''))||'';
     fmap[af]=am;
-    return '<div class="fmap-row"><span>'+af+'</span><select class="fmap-sel" onchange="fmap[''+af+'']=this.value"><option value="">— skip —</option>'+csvHdrs.map(h=>'<option value="'+h+'"'+(h===am?' selected':'')+'>'+h+'</option>').join('')+'</select></div>';
+   return '<div class="fmap-row"><span>'+af+'</span><select class="fmap-sel" onchange="fmap[\''+af+'\']=this.value"><option value="">— skip —</option>'+csvHdrs.map(function(h){return '<option value="'+h+'"'+(h===am?' selected':'')+'>'+h+'</option>';}).join('')+'</select></div>';
   }).join('');
 }
 function buildFromCSV() {

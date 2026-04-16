@@ -927,11 +927,11 @@ function renderDetail(c) {
     +'<div class="fu-acts"><span style="font-size:11px;color:var(--text3)">Quick:</span>'
     +[['1w',7],['2w',14],['1m',30],['3m',90],['6m',180]].map(([l,d])=>'<button class="qbtn" onclick="setFU('+d+')">'+l+'</button>').join('')
     +'</div></div>'
-    +'<div class="fuform"><div class="fur">'
+     +'<div class="fuform"><div class="fur">'
     +'<div class="fgrp"><label>Follow-up Date</label>'+inp('Next Follow-up',c['Next Follow-up'],'date')+'</div>'
     +'<div class="fgrp"><label>Last Contact Date</label>'+inp('Last Contact Date',c['Last Contact Date'],'date')+'</div>'
     +'</div><div class="fgrp"><label>Note for Next Interaction</label>'
-    +'<textarea onchange="uf('Notes for next follow-up',this.value)" placeholder="What to cover?">'+esc(c['Notes for next follow-up']||'')+'</textarea></div></div>'
+    +'<textarea onchange="uf(\'Notes for next follow-up\',this.value)" placeholder="What to cover?">'+esc(c['Notes for next follow-up']||'')+'</textarea></div></div>'
     +'<div class="divr"><span>Log Communication</span></div>'
     +'<div class="logform"><div class="logr">'
     +'<div class="fgrp"><label>Date</label><input type="date" id="lcd" value="'+new Date().toISOString().slice(0,10)+'"></div>'

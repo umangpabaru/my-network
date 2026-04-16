@@ -839,8 +839,9 @@ function renderDetail(c) {
 
   const heritage=c.Heritage||[];
   const autoU=c.Heritage_auto&&!c._heritageEdited;
-  const hTags = HO.map(h => {
-    const classes = ['htag'];
+  
+  const hTags = HO.map(function(h) {
+    var classes = ['htag'];
     if (heritage.includes(h)) classes.push('on');
     if (heritage.includes(h) && autoU) classes.push('auto');
     return '<span class="' + classes.join(' ') + '" data-heritage="' + h + '" onclick="toggleH(this.dataset.heritage)">' + h + '</span>';
@@ -852,7 +853,9 @@ function renderDetail(c) {
   const fb=fu==='overdue'?'<span class="tbadge r">!</span>':'';
 
   const tl=comms.length===0?'<div class="tl-empty">No communications logged yet.</div>':
-    comms.map((e,i)=>'<div class="tl-item"><div class="tl-dot">'+(CI[e.channel]||'·')+'</div><div class="tl-body"><div class="tl-hdr"><span class="tl-date">'+e.date+'</span><span class="tl-ch">'+e.channel+'</span><button class="tl-del" onclick="delC('+i+')">✕</button></div><div class="tl-note">'+esc(e.note)+'</div></div></div>').join('');
+    comms.map(function(e,i) {
+      return '<div class="tl-item"><div class="tl-dot">'+(CI[e.channel]||'·')+'</div><div class="tl-body"><div class="tl-hdr"><span class="tl-date">'+e.date+'</span><span class="tl-ch">'+e.channel+'</span><button class="tl-del" onclick="delC('+i+')">✕</button></div><div class="tl-note">'+esc(e.note)+'</div></div></div>';
+    }).join('');
 
   panel.innerHTML='<div class="dhdr"><h1>'+esc(c['First Name'])+' '+esc(c['Last Name']||'')+'</h1>'
     +'<div class="sub">'+(esc([c.Position,c.Company,c.Country].filter(Boolean).join(' · '))||'No position set')+'</div>'
@@ -895,7 +898,11 @@ function renderDetail(c) {
     +(c['Next Follow-up']?'<div class="fu-dt">'+fmtD(c['Next Follow-up'])+'</div>':'')
     +(c['Notes for next follow-up']?'<div class="fu-note">'+esc(c['Notes for next follow-up'])+'</div>':'')
     +'<div class="fu-acts"><span style="font-size:11px;color:var(--text3)">Quick:</span>'
-    +[['1w',7],['2w',14],['1m',30],['3m',90],['6m',180]].map(function(arr){return '<button class="qbtn" onclick="setFU('+arr[1]+')">'+arr[0]+'</button>';}).join('')
+    +'<button class="qbtn" onclick="setFU(7)">1w</button>'
+    +'<button class="qbtn" onclick="setFU(14)">2w</button>'
+    +'<button class="qbtn" onclick="setFU(30)">1m</button>'
+    +'<button class="qbtn" onclick="setFU(90)">3m</button>'
+    +'<button class="qbtn" onclick="setFU(180)">6m</button>'
     +'</div></div>'
     +'<div class="fuform"><div class="fur">'
     +'<div class="fgrp"><label>Follow-up Date</label>'+inp('Next Follow-up',c['Next Follow-up'],'date')+'</div>'

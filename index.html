@@ -1213,7 +1213,20 @@ function exportJSON() {
 function dl(content,fn,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=fn;a.click();}
 
 // ── HELPERS ──
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+const sel = function(opts, val, fld) {
+  var options = opts.map(function(o) {
+    return '<option' + (val === o ? ' selected' : '') + '>' + o + '</option>';
+  }).join('');
+  return '<select onchange="uf(\'' + fld + '\', this.value)"><option value="">— Select —</option>' + options + '</select>';
+};
+
+const inp = function(fld, val, tp, ph) {
+  var type = tp || 'text';
+  var value = esc(val || '');
+  var placeholder = ph || fld;
+  return '<input type="' + type + '" value="' + value + '" placeholder="' + placeholder + '" onchange="uf(\'' + fld + '\', this.value)">';
+};
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtD(ds){if(!ds)return'—';try{return new Date(ds+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch(e){return ds;}}
 function fmtS(ds){if(!ds)return'';try{return new Date(ds+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch(e){return ds;}}
 function relD(ds){if(!ds)return null;try{const d=Math.round((Date.now()-new Date(ds+'T12:00:00'))/86400000);if(d===0)return'today';if(d===1)return'yesterday';if(d<30)return d+'d ago';if(d<365)return Math.round(d/30)+'mo ago';return Math.round(d/365)+'yr ago';}catch(e){return null;}}

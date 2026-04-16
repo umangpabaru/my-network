@@ -851,7 +851,12 @@ const inp = (fld, val, tp, ph) => {
 
   const heritage=c.Heritage||[];
   const autoU=c.Heritage_auto&&!c._heritageEdited;
-  const hTags=HO.map(h=>'<span class="htag'+(heritage.includes(h)?' on':'')+(heritage.includes(h)&&autoU?' auto':'')+'" onclick="toggleH(''+h+'')">'+h+'</span>').join('');
+  const hTags = HO.map(h => {
+  const classes = ['htag'];
+  if (heritage.includes(h)) classes.push('on');
+  if (heritage.includes(h) && autoU) classes.push('auto');
+  return `<span class="${classes.join(' ')}" data-heritage="${h}" onclick="toggleH(this.dataset.heritage)">${h}</span>`;
+}).join('');
 
   const fuCls={none:'',overdue:'overdue',soon:'soon',ok:'ok'}[fu];
   const fuLbl={none:'NO FOLLOW-UP SET',overdue:'OVERDUE',soon:'DUE SOON',ok:'SCHEDULED'}[fu];

@@ -867,14 +867,14 @@ const inp = (fld, val, tp, ph) => {
     comms.map((e,i)=>'<div class="tl-item"><div class="tl-dot">'+(CI[e.channel]||'·')+'</div><div class="tl-body"><div class="tl-hdr"><span class="tl-date">'+e.date+'</span><span class="tl-ch">'+e.channel+'</span><button class="tl-del" onclick="delC('+i+')">✕</button></div><div class="tl-note">'+esc(e.note)+'</div></div></div>').join('');
 
   panel.innerHTML='<div class="dhdr"><h1>'+esc(c['First Name'])+' '+esc(c['Last Name']||'')+'</h1>'
-    +'<div class="sub">'+esc([c.Position,c.Company,c.Country].filter(Boolean).join(' · '))||'No position set'+'</div>'
+    +'<div class="sub">'+(esc([c.Position,c.Company,c.Country].filter(Boolean).join(' · '))||'No position set')+'</div>'
     +(c['Linkedin URL']?'<div class="li-row"><svg width="12" height="12" fill="var(--blue)" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><a class="li-link" href="'+c['Linkedin URL']+'" target="_blank">LinkedIn</a><span style="font-size:10px;color:var(--text3)">· '+(c['Linkedin Connected On']||'—')+'</span></div>':'')
     +'</div>'
     +(mf.length?'<div class="miss-banner"><div class="miss-n">'+mf.length+'</div><div class="miss-t">Missing: <strong>'+mf.join(', ')+'</strong></div></div>':'')
     +'<div class="tabs">'
-  +'<div class="tab on" onclick="swTab(this,\'tp\')">Profile</div>'
-  +'<div class="tab" onclick="swTab(this,\'ta\')">Activity '+cb+fb+'</div>'
-+'</div>
+    +'<div class="tab on" onclick="swTab(this,\'tp\')">Profile</div>'
+    +'<div class="tab" onclick="swTab(this,\'ta\')">Activity '+cb+fb+'</div>'
+    +'</div>'
 
     // PROFILE TAB
     +'<div class="tc on" id="tp">'
@@ -902,8 +902,31 @@ const inp = (fld, val, tp, ph) => {
     +'<div class="stitle">Flags</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px">'
     +'<div class="trow"><span>Seasonal greetings</span><label class="tog"><input type="checkbox" '+(c['Thanks giving message']||c['Write to for Holidays']?'checked':'')+' onchange="uf2(this.checked)"><span class="tog-sl"></span></label></div>'
-    +'<div class="trow"><span>Mark for deletion</span><label class="tog"><input type="checkbox" '+(c.Delete?'checked':'')+' onchange="uf('Delete',this.checked)"><span class="tog-sl"></span></label></div>'
+    +'<div class="trow"><span>Mark for deletion</span><label class="tog"><input type="checkbox" '+(c.Delete?'checked':'')+' onchange="uf(\'Delete\',this.checked)"><span class="tog-sl"></span></label></div>'
     +'</div></div>'
+
+    // ACTIVITY TAB
+    +'<div class="tc" id="ta">'
+    +'<div class="fu-card '+fuCls+'"><div class="fu-st '+fuCls+'">'+fuLbl+'</div>'
+    +(c['Next Follow-up']?'<div class="fu-dt">'+fmtD(c['Next Follow-up'])+'</div>':'')
+    +(c['Notes for next follow-up']?'<div class="fu-note">'+esc(c['Notes for next follow-up'])+'</div>':'')
+    +'<div class="fu-acts"><span style="font-size:11px;color:var(--text3)">Quick:</span>'
+    +[['1w',7],['2w',14],['1m',30],['3m',90],['6m',180]].map(([l,d])=>'<button class="qbtn" onclick="setFU('+d+')">'+l+'</button>').join('')
+    +'</div></div>'
+    +'<div class="fuform"><div class="fur">'
+    +'<div class="fgrp"><label>Follow-up Date</label>'+inp('Next Follow-up',c['Next Follow-up'],'date')+'</div>'
+    +'<div class="fgrp"><label>Last Contact Date</label>'+inp('Last Contact Date',c['Last Contact Date'],'date')+'</div>'
+    +'</div><div class="fgrp"><label>Note for Next Interaction</label>'
+    +'<textarea onchange="uf(\'Notes for next follow-up\',this.value)" placeholder="What to cover?">'+esc(c['Notes for next follow-up']||'')+'</textarea></div></div>'
+    +'<div class="divr"><span>Log Communication</span></div>'
+    +'<div class="logform"><div class="logr">'
+    +'<div class="fgrp"><label>Date</label><input type="date" id="lcd" value="'+new Date().toISOString().slice(0,10)+'"></div>'
+    +'<div class="fgrp"><label>Channel</label><select id="lcc">'+CHO.map(o=>'<option>'+o+'</option>').join('')+'</select></div>'
+    +'</div><div class="fgrp" style="margin-bottom:10px"><label>Note</label><textarea id="lcn" placeholder="What did you discuss?" rows="2"></textarea></div>'
+    +'<button class="log-sub" onclick="addC()">+ Log Communication</button></div>'
+    +'<div class="divr"><span>History'+(comms.length?' ('+comms.length+')':'')+'</span></div>'
+    +'<div class="tl">'+tl+'</div>'
+    +'<div style="height:20px"></div></div>';
 
     // ACTIVITY TAB
     +'<div class="tc" id="ta">'

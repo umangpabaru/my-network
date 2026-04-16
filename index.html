@@ -837,8 +837,17 @@ function renderDetail(c) {
   if(!c['Business Prospect']) mf.push('Business Prospect');
   if(!(c.Heritage||[]).length) mf.push('Heritage');
 
-  const sel=(opts,val,fld)=>'<select onchange="uf(''+fld+'',this.value)"><option value="">— Select —</option>'+opts.map(o=>'<option'+(val===o?' selected':'')+'>'+o+'</option>').join('')+'</select>';
-  const inp=(fld,val,tp,ph)=>'<input type="'+(tp||'text')+'" value="'+esc(val||'')+'" placeholder="'+(ph||fld)+'" onchange="uf(''+fld+'',this.value)">';
+  const sel = (opts, val, fld) => {
+  const options = opts.map(o => `<option${val === o ? ' selected' : ''}>${o}</option>`).join('');
+  return `<select onchange="uf('${fld}', this.value)"><option value="">— Select —</option>${options}</select>`;
+};
+
+const inp = (fld, val, tp, ph) => {
+  const type = tp || 'text';
+  const value = esc(val || '');
+  const placeholder = ph || fld;
+  return `<input type="${type}" value="${value}" placeholder="${placeholder}" onchange="uf('${fld}', this.value)">`;
+};
 
   const heritage=c.Heritage||[];
   const autoU=c.Heritage_auto&&!c._heritageEdited;

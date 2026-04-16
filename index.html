@@ -937,7 +937,9 @@ function toggleH(tag) {
   c.Heritage=c.Heritage.includes(tag)?c.Heritage.filter(h=>h!==tag):[...c.Heritage,tag];
   persist(c);
   const g=document.querySelector('.hgrid');
-  if(g) g.innerHTML=HO.map(h=>'<span class="htag'+(c.Heritage.includes(h)?' on':'')+'" onclick="toggleH(''+h+'')">'+h+'</span>').join('');
+if(g) g.innerHTML=HO.map(function(h){
+  return '<span class="htag'+(c.Heritage.includes(h)?' on':'')+'" data-heritage="'+h+'" onclick="toggleH(this.dataset.heritage)">'+h+'</span>';
+}).join('');
 }
 async function toggleVIP() {
   const c=filtered[selIdx]; if(!c) return;
